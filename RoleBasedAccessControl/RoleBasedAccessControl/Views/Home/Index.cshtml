@@ -1,0 +1,358 @@
+﻿@inject RoleBasedAccessControl.POCO.IApplicationConfiguration AppSettings;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <style>
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #customers td, #customers th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #customers tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            #customers tr:hover {
+                background-color: #ddd;
+            }
+
+            #customers th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+    </style>
+</head>
+<div class="row text-center" id="dv_add_user">
+    <div class="col-md-4">
+
+    </div>
+    <div style="background: #f5f4f4;">
+        <h4>Add New User</h4>
+        <table class="text-center">
+            <tr>
+                <td>Full Name:</td>
+                <td><input type="text" id="User_Name" /></td>
+            </tr>
+            <tr>
+                <td>Email Address:</td>
+                <td><input type="email" id="User_EmailAddress" /></td>
+            </tr>
+            <tr>
+                <td>Create Password:</td>
+                <td><input type="password" id="User_Password" /></td>
+            </tr>
+            <tr>
+                <td>Role: </td>
+                <td>
+                    <select id="User_Role" multiple>
+                        <option value="2">Customer Admin</option>
+                        <option value="3">Customer Member</option>
+                        <option value="4">Users</option>
+                        <option value="5">Admin</option>
+                    </select>
+                </td>
+            </tr>
+        </table><br />
+        <input class="btn btn-success" type="button" onclick="fn_AddNewUser()" value="Submit" />
+    </div>
+</div>
+<div id="dv_Create_ScrollHere"></div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <table id="customers">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tblbdy_Users">
+                
+            </tbody>
+        </table></div>
+</div>
+<br />
+<div class="row text-center" id="dv_update_user" style="display:none">
+    <div class="col-md-4">
+
+    </div>
+    <div style="background: #f5f4f4;">
+        <h4>Update User</h4>
+        <table class="text-center">
+            <tr>
+                <td>Edit Full Name:</td>
+                <td><input type="text" id="Update_User_Name" /></td>
+            </tr>
+            <tr>
+                <td>Edit Email Address:</td>
+                <td><input type="email" id="Update_User_EmailAddress" /></td>
+            </tr>
+            <tr>
+                <td>Change Password:</td>
+                <td><input type="password" id="Update_User_Password" /></td>
+            </tr>
+            <tr>
+                <td>Change Role: </td>
+                <td>
+                    <select id="Update_User_Role" multiple>
+                        <option value="2">Customer Admin</option>
+                        <option value="3">Customer Member</option>
+                        <option value="4">Users</option>
+                        <option value="5">Admin</option>
+                    </select>
+                </td>
+            </tr>
+        </table><br />
+        <input class="btn btn-success" type="button" onclick="fn_UpdateUser()" value="Submit" />
+    </div>
+</div>
+<script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/vendor/bootstrap/js/popper.js"></script>
+<script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="~/vendor/daterangepicker/moment.min.js"></script>
+<script src="~/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="~/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+<script src="~/js/main.js"></script>
+<script>
+    var APIEndPoint = "";
+    sessionStorage.setItem("APIEndPoint", '@AppSettings.APIEndPoint');
+    sessionStorage.setItem("UIEndPoint", '@AppSettings.UIEndPoint');
+    function fnApiRequestUri(url) {
+        return getAPIEndPoint() + url;
+    }
+    function getAPIEndPoint() {
+        return sessionStorage.getItem('APIEndPoint');
+    }
+    function getJwtBearerToken() {
+        return "Bearer " + sessionStorage.getItem('AccessToken');
+    }
+    function getRefreshToken() {
+        return sessionStorage.getItem('RefreshToken');
+    }
+</script>
+<script>
+    function fn_AddNewUser() {
+        var roleList = [];
+        $.each($("#User_Role").val(), function (i, role) {
+            roleList.push({ 'RoleId': parseInt(role) });
+        });
+        var userdetails = {
+            'FullName': $("#User_Name").val(),
+            'PersonalMailId': $("#User_EmailAddress").val(),
+            'Roles': roleList,
+        }
+        $.ajax({
+            async: true,
+            cache: false,
+            type: 'POST',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + '', 'User_Password': '' + $("#User_Password").val() + ''
+            },
+            url: sessionStorage.getItem("UIEndPoint") + "api/Users/AddNewUser" + '',
+            contentType: 'Application/json',
+            data: JSON.stringify(userdetails),
+            success: function (xhr, ajaxOptions, thrownError) {
+                var data = $.parseJSON(xhr);
+                if (thrownError.status === 200) {
+                    fn_UserView(0);
+                    alert(data);
+                }
+                else if (thrownError.status === 206) {
+                    alert(data);
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('There was problem processing your request. Please try again later.');
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+    function fn_UserView(userid) {
+        $.ajax({
+            async: true,
+            cache: false,
+            type: 'GET',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+            },
+            url: sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid" + userid + '',
+            success: function (xhr, ajaxOptions, thrownError) {
+                var data = $.parseJSON(xhr);
+                if (thrownError.status === 200) {
+                    var tblbdy = '';
+                    $.each(data, function (i, users) {
+                        var roles = '';
+                        $.each(users.Roles, function (j, rolesList) {
+                            roles += j > 0 ? (', ' + rolesList.RoleName) : rolesList.RoleName;
+                        });
+                        tblbdy += `<tr id="row_userdetails${users.UserId}">
+                    <td>${users.FullName}</td>
+                    <td>${users.PersonalMailId}</td>
+                    <td>${roles}</td>
+                    <td>
+                        <span><i class="fa fa-eye" onclick="fn_UserView(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
+                        <span><i class="fa fa-edit" onclick="fn_UserEdit(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
+                        <span><i class="fa fa-trash" onclick="fn_UserDelete(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
+                    </td>
+                </tr>`;
+
+                    });
+                    $("#tblbdy_Users").html(tblbdy);
+                }
+                else if (thrownError.status === 206) {
+                    alert(data);
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('There was problem processing your request. Please try again later.');
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+    function fn_UserDelete(userid) {        
+        if (confirm("Are you sure?")) {
+            $.ajax({
+                async: true,
+                cache: false,
+                type: 'DELETE',
+                headers: {
+                    'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+                },
+                url: sessionStorage.getItem("UIEndPoint") + "api/Users/DeleteUserDetails?userid=" + userid + '',
+                success: function (xhr, ajaxOptions, thrownError) {
+                    var data = $.parseJSON(xhr);
+                    if (thrownError.status === 200) {
+                        $("#row_userdetails" + userid).remove();
+                        alert(data);
+                    }
+                    else if (thrownError.status === 206) {
+                        alert(data);
+                    }
+                    else {
+                        StatusCode = 401;
+                        window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('There was problem processing your request. Please try again later.');
+                    //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            });
+        }
+    }
+    let let_userId = 0;
+    function fn_UserEdit(userid) {
+        let_userId = userid;
+        $.ajax({
+            async: true,
+            cache: false,
+            type: 'GET',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+            },
+            url: sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid" + userid + '',
+            success: function (xhr, ajaxOptions, thrownError) {
+                var data = $.parseJSON(xhr);
+                if (thrownError.status === 200) {
+                    $.each(data, function (i, users) {
+                        $("#dv_update_user").show();
+                        $("html, body").animate({ scrollTop: $('#dv_Create_ScrollHere').offset().top + 20 }, 1000);
+                        var roles = '';
+                        $.each(users.Roles, function (j, rolesList) {
+                            roles += j > 0 ? (', ' + rolesList.RoleName) : rolesList.RoleName;
+                        });
+                        $("#Update_User_Name").val(users.FullName);
+                        $("#Update_User_EmailAddress").val(users.PersonalMailId);
+                        $("#Update_User_Password").val(users.Password);
+                    });
+                }
+                else if (thrownError.status === 206) {
+                    alert(data);
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('There was problem processing your request. Please try again later.');
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+
+    function fn_UpdateUser() {
+        var roleList = [];
+        roleList.push({ 'RoleId': 2 });
+        var userdetails = {
+            'FullName': $("#Update_User_Name").val(),
+            'PersonalMailId': $("#Update_User_EmailAddress").val(),
+            'Roles': roleList,
+        }
+        $.ajax({
+            async: true,
+            cache: false,
+            type: 'POST',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + '', 'User_Password': '' + $("#Update_User_Password").val() + ''
+            },
+            url: sessionStorage.getItem("UIEndPoint") + "api/Users/UpdateUserDetails" + '',
+            contentType: 'Application/json',
+            data: JSON.stringify(userdetails),
+            success: function (xhr, ajaxOptions, thrownError) {
+                var data = $.parseJSON(xhr);
+                if (thrownError.status === 200) {
+                    fn_UserView(0);
+                    $("#dv_update_user").hide();
+                    alert(data);
+                }
+                else if (thrownError.status === 206) {
+                    alert(data);
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('There was problem processing your request. Please try again later.');
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+</script>

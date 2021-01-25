@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/RoleBasedAccessControl/RoleBasedAccessControl/obj
+/RoleBasedAccessControl/RoleBasedAccessControl/bin/Debug/netcoreapp3.1
+/RoleBasedAccessControl/.vs/RoleBasedAccessControl
+/RoleBasedAccessControl/Library
+/.vs
+/RoleBasedAccessControl/Lib.Databse/obj
+/RoleBasedAccessControl/Lib.Databse/bin/Debug/netcoreapp3.1
