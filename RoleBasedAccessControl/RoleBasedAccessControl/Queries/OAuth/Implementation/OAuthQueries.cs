@@ -39,7 +39,7 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
                 {
                     roles =  (from TRM in _RBContext.TblRoleMasters
                                    join UR in _RBContext.TblUserRoles on TRM.RoleId equals UR.RoleId
-                                   where UR.UserId == userid && UR.RoleId != 5
+                                   where UR.UserId == userid
                                    select new MOAuth.Roles
                                    {
                                        RoleId = TRM.RoleId,

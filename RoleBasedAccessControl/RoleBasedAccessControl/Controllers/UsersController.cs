@@ -47,7 +47,7 @@ namespace RoleBasedAccessControl.Controllers
 
         [Route("AddNewUser")]
         [HttpPost]
-        [Authorize]//(Roles="System Admin")]
+        [Authorize(Roles = "Royal Brothers Admin, System Admin")]
         public async Task<IActionResult> AddNewUser([FromBody] MUsersDetails userdetails)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -63,7 +63,7 @@ namespace RoleBasedAccessControl.Controllers
         }
         [Route("GetUserDetails")]
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Royal Brothers Admin, System Admin, Customer Admin, Customer Member, User")]
         public async Task<IActionResult> GetUserDetails(int userid = 0)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -79,7 +79,7 @@ namespace RoleBasedAccessControl.Controllers
         }
         [Route("UpdateUserDetails")]
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Royal Brothers Admin, System Admin, Customer Admin, Customer Member")]
         public async Task<IActionResult> UpdateUserDetails([FromBody] MUsersDetails usersDetails)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -95,7 +95,7 @@ namespace RoleBasedAccessControl.Controllers
         }
         [Route("DeleteUserDetails")]
         [HttpDelete]
-        [Authorize]
+        [Authorize(Roles = "Royal Brothers Admin, System Admin, Customer Admin")]
         public async Task<IActionResult> DeleteUserDetails(int userid)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));

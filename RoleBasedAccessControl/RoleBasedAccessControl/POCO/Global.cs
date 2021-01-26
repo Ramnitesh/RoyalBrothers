@@ -30,9 +30,9 @@ namespace RoleBasedAccessControl.POCO
 
         public static class Roles
         {
-            public const string ProviderAdmin = "Provider";
-            public const string CustomerAdmin = "Customer";
-            public const string Team = "Team";
+            public const string SystemAdmin = "System Admin";
+            public const string CustomerAdmin = "Customer Admin";
+            public const string User = "User";
         }
     }
 }

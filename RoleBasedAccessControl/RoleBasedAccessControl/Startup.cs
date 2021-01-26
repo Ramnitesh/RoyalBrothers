@@ -21,6 +21,9 @@ using RoleBasedAccessControl.Queries.User.Interfaces;
 using RoleBasedAccessControl.Queries.User.Implementation;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using RoleBasedAccessControl.CustomHandler;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RoleBasedAccessControl
 {
@@ -36,6 +39,26 @@ namespace RoleBasedAccessControl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("CookieAuthentication")
+                 .AddCookie("CookieAuthentication", config =>
+                 {
+                     config.Cookie.Name = "UserLoginCookie"; // Name of cookie     
+                     config.LoginPath = "/Login/UserLogin"; // Path for the redirect to user login page    
+                     config.AccessDeniedPath = "/Login/UserAccessDenied";
+                 });
+
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("UserPolicy", policyBuilder =>
+                {
+                    policyBuilder.UserRequireCustomClaim(ClaimTypes.Email);
+                    policyBuilder.UserRequireCustomClaim(ClaimTypes.DateOfBirth);
+                });
+            });
+
+            services.AddScoped<IAuthorizationHandler, PoliciesAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             var APIsettingsSection = Configuration.GetSection("ConnectionString");
             APIsettingsSection.Get<POCO.AppSettings>();
@@ -95,15 +118,15 @@ namespace RoleBasedAccessControl
             services.AddSingleton<IApplicationConfiguration, ApplicationConfiguration>(e => Configuration.GetSection("AppSettings").Get<ApplicationConfiguration>());
 
             services.AddDbContext<ramnitesh_aonepageContext>();
-            ramnitesh_aonepageContext aopDBContext = new ramnitesh_aonepageContext(POCO.AppSettings.GetMasterConnectionString());
-            IOAuthDataAccess oauthDataAccess = new OAuthDataAccess(aopDBContext);
+            ramnitesh_aonepageContext rbDBContext = new ramnitesh_aonepageContext(POCO.AppSettings.GetMasterConnectionString());
+            IOAuthDataAccess oauthDataAccess = new OAuthDataAccess(rbDBContext);
 
             services.AddScoped<IOAuth, ROAuth>(sp =>
             {
                 return new ROAuth(oauthDataAccess);
             });
 
-            IUserDataAccess userDataAccess = new UserDataAccess(aopDBContext);
+            IUserDataAccess userDataAccess = new UserDataAccess(rbDBContext);
             services.AddScoped<IUsers, RUsers>(sp =>
             {
                 return new RUsers(userDataAccess);

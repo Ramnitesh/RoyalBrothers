@@ -425,7 +425,7 @@
                 if (thrownError.status === 200) {
                     $.each(data, function (i, users) {
                         $("#dv_update_user").show();
-                        $("html, body").animate({ scrollTop: $('#dv_Create_ScrollHere').offset().top + 20 }, 1000);
+                        $("html, body").animate({ scrollTop: $('#dv_Create_ScrollHere').offset().top + 50 }, 1000);
                         var roles = '';
                         $.each(users.Roles, function (j, rolesList) {
                             roles += j > 0 ? (', ' + rolesList.RoleName) : rolesList.RoleName;
@@ -458,7 +458,7 @@
             roleList.push({ 'RoleId': parseInt($(this).val()) });
         });
         
-        if ($("#User_Name").val().trim() == "" || $("#User_EmailAddress").val().trim() == "") {
+        if ($("#Update_User_Name").val().trim() == "" || $("#Update_User_EmailAddress").val().trim() == "") {
             alert("Field can be empty.");
             return;
         }
@@ -474,7 +474,7 @@
         }
         $(".editsubmit").css("background-color", 'wheat');
         $(".editsubmit").attr("disabled", true);
-        $(".editsubmit").val("Sign In");
+        $(".editsubmit").val("Please wait...");
         $.ajax({
             async: true,
             cache: false,
