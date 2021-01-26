@@ -70,7 +70,7 @@
                     </div>
 
                     <div class="container-login100-form-btn m-t-17">
-                        <input class="login100-form-btn" id="btn_Login" type="button" style="cursor: pointer;" onclick="fn_LoginUser()" value="Sign In" />
+                        <input class="login100-form-btn" id="btnLogin" type="button" style="cursor: pointer;" onclick="fn_LoginUser()" value="Sign In" />
                     </div>
 
                     <div class="w-full text-center p-t-15">
@@ -123,20 +123,23 @@
             return sessionStorage.getItem('RefreshToken');
         }
         function fn_LoginUser() {
-            $("#btn_Login").attr("disabled", true);
-            $("#btn_Login").val("Please Wait...");
+            $("#btnLogin").css("background-color", 'wheat');
+            $("#btnLogin").val("Please Wait...");
+            $("#btnLogin").attr("disabled", true);
             var loginheaders = {};
             loginheaders.UserCredentials_UserName = $('#txt_Login_UserName').val().trim();
             loginheaders.UserCredentials_Password = $('#txt_Login_Password').val().trim();
             $.ajax({
-                async: false,
+                async: true,
                 cache: false,
                 type: 'post',
                 headers: loginheaders,
-                url: fnApiRequestUri("OAuth/Login"),
+                url: sessionStorage.getItem('UIEndPoint') + "OAuth/Login",
                 contentType: 'application/json; charset=utf-8',
                 success: function (xhr, ajaxOptions, thrownError) {
                     var data = $.parseJSON(xhr);
+                    $("#btnLogin").attr("disabled", false);
+                    $("#btnLogin").val("Sign In");
                     if (thrownError.status === 200) {
 
                         if (data.jwtaccessToken === "Invalid credentials!") {
@@ -154,16 +157,16 @@
                     }
                     else if (thrownError.status === 206) {
                         alert(data);
-                        window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                        window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + xhr.status;
                     }
                     else {
                         StatusCode = 401;
-                        window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                        window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + xhr.status;
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert('There was problem processing your request. Please try again later.');
-                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + xhr.status;
                 }
             });
         }

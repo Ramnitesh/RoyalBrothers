@@ -6,9 +6,45 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Your role(s)- <a style="color: #01b9ff;" id="heading_of_user"></a></p>
 </div>
 <head>
     <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <style>
+        .multiselect {
+            width: 200px;
+        }
+
+        .selectBox {
+            position: relative;
+        }
+
+            .selectBox select {
+                width: 100%;
+                font-weight: bold;
+            }
+
+        .overSelect .overSelect_u {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        #checkboxes #checkboxes_u {
+            display: none;
+            border: 1px #dadada solid;
+        }
+
+            #checkboxes #checkboxes_u label {
+                display: block;
+            }
+
+                #checkboxes label:hover {
+                    background-color: #1e90ff;
+                }
+    </style>
     <style>
         #customers {
             font-family: Arial, Helvetica, sans-serif;
@@ -42,7 +78,7 @@
     <div class="col-md-4">
 
     </div>
-    <div style="background: #f5f4f4;">
+    <div style="background: #f5f4f4;padding:3%">
         <h4>Add New User</h4>
         <table class="text-center">
             <tr>
@@ -60,16 +96,38 @@
             <tr>
                 <td>Role: </td>
                 <td>
-                    <select id="User_Role" multiple>
-                        <option value="2">Customer Admin</option>
-                        <option value="3">Customer Member</option>
-                        <option value="4">Users</option>
-                        <option value="5">Admin</option>
-                    </select>
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                            <select id="User_Role">
+                                <option>Select an option</option>
+                            </select>
+                            <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes">
+                            <label for="one">
+                                <input type="checkbox" class="role_option" id="SystemAdmin" value="1" />System Admin
+                            </label>
+                            <label for="two">
+                                <input type="checkbox" class="role_option" id="CustomerAdmin" value="2" />Customer Admin
+                            </label>
+                            <label for="three">
+                                <input type="checkbox" class="role_option" id="CustomerMember" value="3" />Customer Member
+                            </label>
+                            <label for="three">
+                                <input type="checkbox" class="role_option" id="User" value="4" />User
+                            </label>
+                        </div>
+                    </div>
+                    @*<select id="User_Role" multiple>
+            <option value="1">System Admin</option>
+            <option value="2">Customer Admin</option>
+            <option value="3">Customer Member</option>
+            <option value="4">User</option>
+        </select>*@
                 </td>
             </tr>
         </table><br />
-        <input class="btn btn-success" type="button" onclick="fn_AddNewUser()" value="Submit" />
+        <input class="btn btn-success addsubmit" type="button" onclick="fn_AddNewUser()" value="Submit" />
     </div>
 </div>
 <div id="dv_Create_ScrollHere"></div>
@@ -91,13 +149,13 @@
         </table></div>
 </div>
 <br />
-<div class="row text-center" id="dv_update_user" style="display:none">
+<div class="row" id="dv_update_user" style="display:none">
     <div class="col-md-4">
 
     </div>
-    <div style="background: #f5f4f4;">
+    <div style="background: #f5f4f4;padding:3%">
         <h4>Update User</h4>
-        <table class="text-center">
+        <table>
             <tr>
                 <td>Edit Full Name:</td>
                 <td><input type="text" id="Update_User_Name" /></td>
@@ -108,21 +166,47 @@
             </tr>
             <tr>
                 <td>Change Password:</td>
-                <td><input type="password" id="Update_User_Password" /></td>
+                <td><input readonly type="password" id="Update_User_Password" /></td>
+            </tr>
+            <tr>
+                <td>Role(s):</td>
+                <td><label id="static_roles"></label></td>
             </tr>
             <tr>
                 <td>Change Role: </td>
                 <td>
-                    <select id="Update_User_Role" multiple>
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes_u()">
+                            <select id="Update_User_Role">
+                                <option>Select an option</option>
+                            </select>
+                            <div class="overSelect_u"></div>
+                        </div>
+                        <div id="checkboxes_u">
+                            <label for="one">
+                                <input type="checkbox" class="update_role_option" id="SystemAdmin" value="1" />System Admin
+                            </label>                          
+                            <label for="two">                 
+                                <input type="checkbox" class="update_role_option" id="CustomerAdmin" value="2" />Customer Admin
+                            </label>                          
+                            <label for="three">               
+                                <input type="checkbox" class="update_role_option" id="CustomerMember" value="3" />Customer Member
+                            </label>                          
+                            <label for="three">               
+                                <input type="checkbox" class="update_role_option" id="User" value="4" />User
+                            </label>
+                        </div>
+                    </div>
+                    @*<select id="Update_User_Role" multiple>
+                        <option value="1">System Admin</option>
                         <option value="2">Customer Admin</option>
                         <option value="3">Customer Member</option>
-                        <option value="4">Users</option>
-                        <option value="5">Admin</option>
-                    </select>
+                        <option value="4">User</option>
+                    </select>*@
                 </td>
             </tr>
         </table><br />
-        <input class="btn btn-success" type="button" onclick="fn_UpdateUser()" value="Submit" />
+        <input class="btn btn-success editsubmit" type="button" onclick="fn_UpdateUser()" value="Submit" />
     </div>
 </div>
 <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
@@ -141,6 +225,33 @@
 <!--===============================================================================================-->
 <script src="~/js/main.js"></script>
 <script>
+    var expanded = false;
+
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+
+    var expanded_u = false;
+
+    function showCheckboxes_u() {
+        var checkboxes = document.getElementById("checkboxes_u");
+        if (!expanded_u) {
+            checkboxes.style.display = "block";
+            expanded_u = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded_u = false;
+        }
+    }
+
+
     var APIEndPoint = "";
     sessionStorage.setItem("APIEndPoint", '@AppSettings.APIEndPoint');
     sessionStorage.setItem("UIEndPoint", '@AppSettings.UIEndPoint');
@@ -158,16 +269,32 @@
     }
 </script>
 <script>
+    $(document).ready(function () {
+        $("#heading_of_user").html(' ' + sessionStorage.getItem("Role"));
+    });
     function fn_AddNewUser() {
         var roleList = [];
-        $.each($("#User_Role").val(), function (i, role) {
-            roleList.push({ 'RoleId': parseInt(role) });
+        $("input:checkbox[class=role_option]:checked").each(function () {
+            //alert("Id: " + $(this).attr("id") + " Value: " + $(this).val());
+            roleList.push({ 'RoleId': parseInt($(this).val()) });
         });
+        if ($("#User_Name").val().trim() == "" || $("#User_EmailAddress").val().trim() == "" || $("#User_Password").val().trim() == "") {
+            alert("Field can be empty.");
+            return;
+        }
+        else if (roleList.length == 0) {
+            alert("Please assign a role.");
+            return;
+        }
         var userdetails = {
             'FullName': $("#User_Name").val(),
             'PersonalMailId': $("#User_EmailAddress").val(),
             'Roles': roleList,
         }
+        
+        $(".addsubmit").css("background-color", 'wheat');
+        $(".addsubmit").val("Please Wait...");
+        $(".addsubmit").attr("disabled", true);
         $.ajax({
             async: true,
             cache: false,
@@ -179,10 +306,14 @@
             contentType: 'Application/json',
             data: JSON.stringify(userdetails),
             success: function (xhr, ajaxOptions, thrownError) {
+                $(".addsubmit").css("background-color", 'green');
+                $(".addsubmit").attr("disabled", false);
+                $(".addsubmit").val("Sign In");
                 var data = $.parseJSON(xhr);
                 if (thrownError.status === 200) {
                     fn_UserView(0);
                     alert(data);
+                    $("html, body").animate({ scrollTop: $('#dv_Create_ScrollHere').offset().top + 20 }, 1000);
                 }
                 else if (thrownError.status === 206) {
                     alert(data);
@@ -199,6 +330,7 @@
         });
     }
     function fn_UserView(userid) {
+        var static_url = sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid=" + userid + '';
         $.ajax({
             async: true,
             cache: false,
@@ -206,29 +338,30 @@
             headers: {
                 'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
             },
-            url: sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid" + userid + '',
+            url: static_url,
             success: function (xhr, ajaxOptions, thrownError) {
                 var data = $.parseJSON(xhr);
                 if (thrownError.status === 200) {
                     var tblbdy = '';
                     $.each(data, function (i, users) {
-                        var roles = '';
-                        $.each(users.Roles, function (j, rolesList) {
-                            roles += j > 0 ? (', ' + rolesList.RoleName) : rolesList.RoleName;
-                        });
-                        tblbdy += `<tr id="row_userdetails${users.UserId}">
+                        if (users.UserId != sessionStorage.getItem("UserId")) {
+                            var roles = '';
+                            $.each(users.Roles, function (j, rolesList) {
+                                roles += j > 0 ? (', ' + rolesList.RoleName) : rolesList.RoleName;
+                            });
+                            tblbdy += `<tr id="row_userdetails${users.UserId}">
                     <td>${users.FullName}</td>
                     <td>${users.PersonalMailId}</td>
                     <td>${roles}</td>
                     <td>
-                        <span><i class="fa fa-eye" onclick="fn_UserView(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
-                        <span><i class="fa fa-edit" onclick="fn_UserEdit(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
-                        <span><i class="fa fa-trash" onclick="fn_UserDelete(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
+                        <span><i class="fa fa-edit edit" onclick="fn_UserEdit(${users.UserId})" style="font-size: 24px;color: #2749f3;"></i></span>
+                        <span><i class="fa fa-trash trash" onclick="fn_UserDelete(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
                     </td>
                 </tr>`;
-
+                        }
                     });
                     $("#tblbdy_Users").html(tblbdy);
+                    fn_AccessByRole();
                 }
                 else if (thrownError.status === 206) {
                     alert(data);
@@ -239,7 +372,8 @@
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert('There was problem processing your request. Please try again later.');
+                //alert('There was problem processing your request. Please try again later.');
+                fn_UserView(userid);
                 //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
             }
         });
@@ -285,7 +419,7 @@
             headers: {
                 'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
             },
-            url: sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid" + userid + '',
+            url: sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid=" + userid + '',
             success: function (xhr, ajaxOptions, thrownError) {
                 var data = $.parseJSON(xhr);
                 if (thrownError.status === 200) {
@@ -299,6 +433,7 @@
                         $("#Update_User_Name").val(users.FullName);
                         $("#Update_User_EmailAddress").val(users.PersonalMailId);
                         $("#Update_User_Password").val(users.Password);
+                        $("#static_roles").html(roles);
                     });
                 }
                 else if (thrownError.status === 206) {
@@ -318,23 +453,42 @@
 
     function fn_UpdateUser() {
         var roleList = [];
-        roleList.push({ 'RoleId': 2 });
+        $("input:checkbox[class=update_role_option]:checked").each(function () {
+            //alert("Id: " + $(this).attr("id") + " Value: " + $(this).val());
+            roleList.push({ 'RoleId': parseInt($(this).val()) });
+        });
+        
+        if ($("#User_Name").val().trim() == "" || $("#User_EmailAddress").val().trim() == "") {
+            alert("Field can be empty.");
+            return;
+        }
+        else if (roleList.length == 0) {
+            alert("Please assign a role.");
+            return;
+        }
         var userdetails = {
             'FullName': $("#Update_User_Name").val(),
             'PersonalMailId': $("#Update_User_EmailAddress").val(),
             'Roles': roleList,
+            'UserId': let_userId
         }
+        $(".editsubmit").css("background-color", 'wheat');
+        $(".editsubmit").attr("disabled", true);
+        $(".editsubmit").val("Sign In");
         $.ajax({
             async: true,
             cache: false,
             type: 'POST',
             headers: {
-                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + '', 'User_Password': '' + $("#Update_User_Password").val() + ''
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''//, 'User_Password': '' + $("#Update_User_Password").val() + ''
             },
             url: sessionStorage.getItem("UIEndPoint") + "api/Users/UpdateUserDetails" + '',
             contentType: 'Application/json',
             data: JSON.stringify(userdetails),
             success: function (xhr, ajaxOptions, thrownError) {
+                $(".editsubmit").css("background-color", 'green');
+                $(".editsubmit").attr("disabled", false);
+                $(".editsubmit").val("Sign In");
                 var data = $.parseJSON(xhr);
                 if (thrownError.status === 200) {
                     fn_UserView(0);

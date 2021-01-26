@@ -39,7 +39,7 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
                 {
                     roles =  (from TRM in _RBContext.TblRoleMasters
                                    join UR in _RBContext.TblUserRoles on TRM.RoleId equals UR.RoleId
-                                   where UR.UserId == userid
+                                   where UR.UserId == userid && UR.RoleId != 5
                                    select new MOAuth.Roles
                                    {
                                        RoleId = TRM.RoleId,
@@ -148,18 +148,7 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
                                            IsLoginDisabled = tbl_UM.IsLoginDisabled,
                                            IsUserDisabled = tbl_UM.IsUserDisabled,
                                            UserName = tbl_UM.PersonalMailId
-                                       }).SingleOrDefault();
-                    TblUserRole tblUserRole = new TblUserRole();
-                    if (query != null)
-                    {
-                        tblUserRole = (from tb in _RBContext.TblUserRoles
-                                             where tb.UserId == query.UserId & tb.RoleId == roleId
-                                             select tb).SingleOrDefault();
-                        if (tblUserRole == null)
-                        {
-                            query = null;
-                        }
-                    }
+                                       }).FirstOrDefault();
                     dbContextTransaction.Commit();
                     return query;
                 }

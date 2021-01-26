@@ -59,14 +59,28 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
                 {
                     if (true)
                     {
-                        mUsersDetailsList = await _AOnePageDBContext.TblUserMasters.Where(x => userid != 0 ? x.UserId == userid : true).Select(x => new MUsers.MUsersDetails {
+                        mUsersDetailsList = await _AOnePageDBContext.TblUserMasters.Where(x => (userid != 0 ? x.UserId == userid : true) && x.UserId != 1).Select(x => new MUsers.MUsersDetails
+                        {
                             UserId = x.UserId,
                             FullName = x.FullName,
                             PersonalMailId = x.PersonalMailId,
                             Password = x.Password,
-                            Roles = x.TblUserRoles.Where(r => r.UserId == x.UserId).Select(ru => 
-                            new MUsers.MRole { UserId = ru.UserId, RoleId = ru.RoleId, UroleId = ru.UroleId, RoleName=_AOnePageDBContext.TblRoleMasters.Where(r=>r.RoleId==ru.RoleId).Select(r=> r.Role).FirstOrDefault().ToString() }).ToList()
+                            Roles = x.TblUserRoles.Where(r => r.UserId == x.UserId).Select(ru =>
+                            new MUsers.MRole { UserId = ru.UserId, RoleId = ru.RoleId, UroleId = ru.UroleId, RoleName = _AOnePageDBContext.TblRoleMasters.Where(r => r.RoleId == ru.RoleId).Select(r => r.Role).FirstOrDefault().ToString() }).ToList()
                         }).ToListAsync();
+                        //mUsersDetailsList = await (from tblUM in _AOnePageDBContext.TblUserMasters
+                        //                           join tblUR in _AOnePageDBContext.TblUserRoles on tblUM.UserId equals tblUR.UserId
+                        //                           where tblUR.RoleId != 5 && (userid != 0 ? tblUM.UserId == userid : true)
+                        //                           select new MUsers.MUsersDetails
+                        //                           {
+                        //                               UserId = tblUM.UserId,
+                        //                               FullName = tblUM.FullName,
+                        //                               PersonalMailId = tblUM.PersonalMailId,
+                        //                               Password = tblUM.Password,
+                        //                               Roles = tblUM.TblUserRoles.Where(r => r.UserId == tblUM.UserId).Select(ru =>
+                        //                               new MUsers.MRole { UserId = ru.UserId, RoleId = ru.RoleId, UroleId = ru.UroleId, RoleName = _AOnePageDBContext.TblRoleMasters.Where(r => r.RoleId == ru.RoleId).Select(r => r.Role).FirstOrDefault().ToString() }).ToList()
+                        //                           }).ToListAsync();
+                        
                     }
                     dbContextTransaction.Commit();
                     return mUsersDetailsList;
@@ -96,8 +110,8 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
 
                     TblUserMaster tblUserMaster = await _AOnePageDBContext.TblUserMasters.Where(x => x.UserId == userdetails.UserId).FirstOrDefaultAsync();
                     tblUserMaster.FullName = userdetails.FullName;
-                    tblUserMaster.Password = userdetails.Password;
-                    //tblUserMaster.PersonalMailId = userdetails.PersonalMailId;
+                    //tblUserMaster.Password = userdetails.Password;
+                    tblUserMaster.PersonalMailId = userdetails.PersonalMailId;
                     _AOnePageDBContext.TblUserMasters.Update(tblUserMaster);
 
                     foreach (MUsers.MRole role in userdetails.Roles)

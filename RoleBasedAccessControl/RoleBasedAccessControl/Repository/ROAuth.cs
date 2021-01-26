@@ -57,7 +57,7 @@ namespace RoleBasedAccessControl.Repository
                     string Roles = string.Empty;
                     for (int i = 0; i < roleDetails.Count; i++)
                     {
-                        Roles += roleDetails[i].Role + (i > 0 ? ", " : "");
+                        Roles += i > 0 ? (", " + roleDetails[i].Role) : roleDetails[i].Role;
                     }
                     string RefreshToken = GenerateRefreshToken();
                     bool logResponse = logUserSession(userdetails.UserId.ToString(), RefreshToken, "C");
