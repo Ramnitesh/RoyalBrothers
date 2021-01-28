@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoleBasedAccessControl", "R
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{784EBC5B-12DD-4E98-9935-7E5156338FA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Databse", "Lib.Databse\Lib.Databse.csproj", "{F6F4CFF7-681C-4D24-A7D3-7DE439E45E03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Databse", "Lib.Databse\Lib.Databse.csproj", "{354701E0-E440-4FB1-820E-B70A2E0E6DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +19,16 @@ Global
 		{183BA114-C548-48BD-9F62-23B37464A6B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{183BA114-C548-48BD-9F62-23B37464A6B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{183BA114-C548-48BD-9F62-23B37464A6B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6F4CFF7-681C-4D24-A7D3-7DE439E45E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6F4CFF7-681C-4D24-A7D3-7DE439E45E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6F4CFF7-681C-4D24-A7D3-7DE439E45E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6F4CFF7-681C-4D24-A7D3-7DE439E45E03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{354701E0-E440-4FB1-820E-B70A2E0E6DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354701E0-E440-4FB1-820E-B70A2E0E6DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354701E0-E440-4FB1-820E-B70A2E0E6DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354701E0-E440-4FB1-820E-B70A2E0E6DF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F6F4CFF7-681C-4D24-A7D3-7DE439E45E03} = {784EBC5B-12DD-4E98-9935-7E5156338FA1}
+		{354701E0-E440-4FB1-820E-B70A2E0E6DF6} = {784EBC5B-12DD-4E98-9935-7E5156338FA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B723D84-4DB0-41CE-9E09-B03C27D42DCE}

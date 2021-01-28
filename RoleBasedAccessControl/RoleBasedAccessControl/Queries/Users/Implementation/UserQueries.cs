@@ -24,17 +24,17 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
                     tblUserMaster.FullName = userdetails.FullName;
                     tblUserMaster.Password = password;
                     tblUserMaster.PersonalMailId = userdetails.PersonalMailId;
-                    await _AOnePageDBContext.TblUserMasters.AddAsync(tblUserMaster);
+                    await _AOnePageDBContext.TblUserMaster.AddAsync(tblUserMaster);
                     await _AOnePageDBContext.SaveChangesAsync();
 
-                    int userid = await _AOnePageDBContext.TblUserMasters.Where(x => x.FullName == userdetails.FullName && x.PersonalMailId == x.PersonalMailId).Select(x=>x.UserId).FirstOrDefaultAsync();
+                    int userid = await _AOnePageDBContext.TblUserMaster.Where(x => x.FullName == userdetails.FullName && x.PersonalMailId == x.PersonalMailId).Select(x=>x.UserId).FirstOrDefaultAsync();
 
                     foreach (MUsers.MRole role in userdetails.Roles)
                     {
                         TblUserRole tblUserRole = new TblUserRole();
                         tblUserRole.UserId = userid;
                         tblUserRole.RoleId = role.RoleId;
-                        await _AOnePageDBContext.TblUserRoles.AddAsync(tblUserRole);
+                        await _AOnePageDBContext.TblUserRole.AddAsync(tblUserRole);
                     }
                     await _AOnePageDBContext.SaveChangesAsync();
                     dbContextTransaction.Commit();
@@ -59,14 +59,14 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
                 {
                     if (true)
                     {
-                        mUsersDetailsList = await _AOnePageDBContext.TblUserMasters.Where(x => (userid != 0 ? x.UserId == userid : true) && x.UserId != 1).Select(x => new MUsers.MUsersDetails
+                        mUsersDetailsList = await _AOnePageDBContext.TblUserMaster.Where(x => (userid != 0 ? x.UserId == userid : true) && x.UserId != 1).Select(x => new MUsers.MUsersDetails
                         {
                             UserId = x.UserId,
                             FullName = x.FullName,
                             PersonalMailId = x.PersonalMailId,
                             Password = x.Password,
-                            Roles = x.TblUserRoles.Where(r => r.UserId == x.UserId).Select(ru =>
-                            new MUsers.MRole { UserId = ru.UserId, RoleId = ru.RoleId, UroleId = ru.UroleId, RoleName = _AOnePageDBContext.TblRoleMasters.Where(r => r.RoleId == ru.RoleId).Select(r => r.Role).FirstOrDefault().ToString() }).ToList()
+                            Roles = x.TblUserRole.Where(r => r.UserId == x.UserId).Select(ru =>
+                            new MUsers.MRole { UserId = ru.UserId, RoleId = ru.RoleId, UroleId = ru.UroleId, RoleName = _AOnePageDBContext.TblRoleMaster.Where(r => r.RoleId == ru.RoleId).Select(r => r.Role).FirstOrDefault().ToString() }).ToList()
                         }).ToListAsync();
                         //mUsersDetailsList = await (from tblUM in _AOnePageDBContext.TblUserMasters
                         //                           join tblUR in _AOnePageDBContext.TblUserRoles on tblUM.UserId equals tblUR.UserId
@@ -101,25 +101,25 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
             {
                 if (_AOnePageDBContext != null)
                 {
-                    List<TblUserRole> mRoles = await _AOnePageDBContext.TblUserRoles.Where(x => x.UserId == userdetails.UserId).ToListAsync();
+                    List<TblUserRole> mRoles = await _AOnePageDBContext.TblUserRole.Where(x => x.UserId == userdetails.UserId).ToListAsync();
                     foreach (var userRole in mRoles)
                     {
-                        _AOnePageDBContext.TblUserRoles.Remove(userRole);
+                        _AOnePageDBContext.TblUserRole.Remove(userRole);
                     }
                     await _AOnePageDBContext.SaveChangesAsync();
 
-                    TblUserMaster tblUserMaster = await _AOnePageDBContext.TblUserMasters.Where(x => x.UserId == userdetails.UserId).FirstOrDefaultAsync();
+                    TblUserMaster tblUserMaster = await _AOnePageDBContext.TblUserMaster.Where(x => x.UserId == userdetails.UserId).FirstOrDefaultAsync();
                     tblUserMaster.FullName = userdetails.FullName;
                     //tblUserMaster.Password = userdetails.Password;
                     tblUserMaster.PersonalMailId = userdetails.PersonalMailId;
-                    _AOnePageDBContext.TblUserMasters.Update(tblUserMaster);
+                    _AOnePageDBContext.TblUserMaster.Update(tblUserMaster);
 
                     foreach (MUsers.MRole role in userdetails.Roles)
                     {
                         TblUserRole tblUserRole = new TblUserRole();
                         tblUserRole.UserId = tblUserMaster.UserId;
                         tblUserRole.RoleId = role.RoleId;
-                        await _AOnePageDBContext.TblUserRoles.AddAsync(tblUserRole);
+                        await _AOnePageDBContext.TblUserRole.AddAsync(tblUserRole);
                     }
                     await _AOnePageDBContext.SaveChangesAsync();
                     dbContextTransaction.Commit();
@@ -140,13 +140,13 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
             {
                 if (_AOnePageDBContext != null)
                 {
-                    List<TblUserRole> mRoles = await _AOnePageDBContext.TblUserRoles.Where(x => x.UserId == UserId).ToListAsync();
+                    List<TblUserRole> mRoles = await _AOnePageDBContext.TblUserRole.Where(x => x.UserId == UserId).ToListAsync();
                     foreach (var userRole in mRoles)
                     {
-                        _AOnePageDBContext.TblUserRoles.Remove(userRole);
+                        _AOnePageDBContext.TblUserRole.Remove(userRole);
                     }
-                    TblUserMaster tblUserMaster = await _AOnePageDBContext.TblUserMasters.Where(x => x.UserId == UserId).FirstOrDefaultAsync();
-                    _AOnePageDBContext.TblUserMasters.Remove(tblUserMaster);
+                    TblUserMaster tblUserMaster = await _AOnePageDBContext.TblUserMaster.Where(x => x.UserId == UserId).FirstOrDefaultAsync();
+                    _AOnePageDBContext.TblUserMaster.Remove(tblUserMaster);
 
                     await _AOnePageDBContext.SaveChangesAsync();
                     dbContextTransaction.Commit();

@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-#nullable disable
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
 
 namespace Lib.Databse.Models
 {
@@ -30,15 +32,14 @@ namespace Lib.Databse.Models
         {
         }
 
-        public virtual DbSet<TblRoleMaster> TblRoleMasters { get; set; }
-        public virtual DbSet<TblUserMaster> TblUserMasters { get; set; }
-        public virtual DbSet<TblUserRole> TblUserRoles { get; set; }
-        public virtual DbSet<TblUserSession> TblUserSessions { get; set; }
+        public virtual DbSet<TblRoleMaster> TblRoleMaster { get; set; }
+        public virtual DbSet<TblUserMaster> TblUserMaster { get; set; }
+        public virtual DbSet<TblUserRole> TblUserRole { get; set; }
+        public virtual DbSet<TblUserSession> TblUserSession { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<TblRoleMaster>(entity =>
             {
                 entity.HasKey(e => e.RoleId)
@@ -92,13 +93,13 @@ namespace Lib.Databse.Models
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.TblUserRoles)
+                    .WithMany(p => p.TblUserRole)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Tbl_UserR__RoleI__2E1BDC42");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.TblUserRoles)
+                    .WithMany(p => p.TblUserRole)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Tbl_UserR__UserI__2F10007B");

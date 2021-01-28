@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
 
 namespace Lib.Databse.Models
 {
@@ -9,7 +11,7 @@ namespace Lib.Databse.Models
     {
         public TblUserMaster()
         {
-            TblUserRoles = new HashSet<TblUserRole>();
+            TblUserRole = new HashSet<TblUserRole>();
         }
 
         public int UserId { get; set; }
@@ -20,6 +22,6 @@ namespace Lib.Databse.Models
         public string PrivacyCode { get; set; }
         public string FullName { get; set; }
 
-        public virtual ICollection<TblUserRole> TblUserRoles { get; set; }
+        public virtual ICollection<TblUserRole> TblUserRole { get; set; }
     }
 }

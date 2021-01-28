@@ -18,7 +18,7 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
             {
                 if (_RBContext != null)
                 {
-                    var query = (from CM in _RBContext.TblUserMasters
+                    var query = (from CM in _RBContext.TblUserMaster
                                  select CM.Password
                                  );
                     return query.FirstOrDefault();
@@ -37,8 +37,8 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
             {
                 if (_RBContext != null)
                 {
-                    roles =  (from TRM in _RBContext.TblRoleMasters
-                                   join UR in _RBContext.TblUserRoles on TRM.RoleId equals UR.RoleId
+                    roles =  (from TRM in _RBContext.TblRoleMaster
+                                   join UR in _RBContext.TblUserRole on TRM.RoleId equals UR.RoleId
                                    where UR.UserId == userid
                                    select new MOAuth.Roles
                                    {
@@ -76,18 +76,18 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
                 }
                 else
                 {
-                    var ifexist = _RBContext.TblUserSessions.Where(p => p.Userid == Convert.ToInt32(UserId) && p.RefreshToken == RefreshToken).Select(p => p.SessionGuid).FirstOrDefault();
+                    var ifexist = _RBContext.TblUserSession.Where(p => p.Userid == Convert.ToInt32(UserId) && p.RefreshToken == RefreshToken).Select(p => p.SessionGuid).FirstOrDefault();
                     if (ifexist != null)
                     {
                         if (Behaviour == "U")
                         {
-                            TblUserSession tblUserSession = _RBContext.TblUserSessions.Where(p => p.Userid == Convert.ToInt32(UserId) && p.RefreshToken == RefreshToken).FirstOrDefault();
+                            TblUserSession tblUserSession = _RBContext.TblUserSession.Where(p => p.Userid == Convert.ToInt32(UserId) && p.RefreshToken == RefreshToken).FirstOrDefault();
                             tblUserSession.RefreshedAt = DateTime.UtcNow;
                             _RBContext.Update(tblUserSession);
                         }
                         else if (Behaviour == "L")
                         {
-                            TblUserSession tblUserSession = _RBContext.TblUserSessions.Where(p => p.Userid == Convert.ToInt32(UserId) && p.RefreshToken == RefreshToken).FirstOrDefault();
+                            TblUserSession tblUserSession = _RBContext.TblUserSession.Where(p => p.Userid == Convert.ToInt32(UserId) && p.RefreshToken == RefreshToken).FirstOrDefault();
                             tblUserSession.EndedAt = DateTime.UtcNow;
                             _RBContext.Update(tblUserSession);
                         }
@@ -114,7 +114,7 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
                 if (_RBContext != null)
                 {
                     TblUserMaster tblUserMaster = new TblUserMaster();
-                    tblUserMaster = await _RBContext.TblUserMasters.Where(p => p.PersonalMailId == emailId && p.IsLoginDisabled == false && p.IsUserDisabled == false && p.PrivacyCode == privacyCode).SingleOrDefaultAsync();
+                    tblUserMaster = await _RBContext.TblUserMaster.Where(p => p.PersonalMailId == emailId && p.IsLoginDisabled == false && p.IsUserDisabled == false && p.PrivacyCode == privacyCode).SingleOrDefaultAsync();
                     if (tblUserMaster != null)
                     {
                         return "s";
@@ -140,7 +140,7 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
             {
                 if (_RBContext != null)
                 {
-                    var query = (from tbl_UM in _RBContext.TblUserMasters
+                    var query = (from tbl_UM in _RBContext.TblUserMaster
                                        where tbl_UM.Password == password & tbl_UM.IsLoginDisabled == false & tbl_UM.IsUserDisabled == false & (tbl_UM.PersonalMailId == username)
                                        select new LoginResponse
                                        {

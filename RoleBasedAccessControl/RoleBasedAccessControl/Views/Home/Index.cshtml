@@ -279,7 +279,7 @@
             roleList.push({ 'RoleId': parseInt($(this).val()) });
         });
         if ($("#User_Name").val().trim() == "" || $("#User_EmailAddress").val().trim() == "" || $("#User_Password").val().trim() == "") {
-            alert("Field can be empty.");
+            alert("Field can't be empty.");
             return;
         }
         else if (roleList.length == 0) {
@@ -459,7 +459,7 @@
         });
         
         if ($("#Update_User_Name").val().trim() == "" || $("#Update_User_EmailAddress").val().trim() == "") {
-            alert("Field can be empty.");
+            alert("Field can't be empty.");
             return;
         }
         else if (roleList.length == 0) {
