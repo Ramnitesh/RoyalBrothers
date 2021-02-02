@@ -13,5 +13,9 @@ namespace RoleBasedAccessControl.Queries.User.Interfaces
         Task<List<MUsersDetails>> GetUserDetails(int userid);
         Task<bool> UpdateUserDetails(MUsersDetails userdetails);
         Task<bool> DeleteUserDetails(int UserId);
+        Task<bool> AddRoleSourceActionDetails(MUsers.MRoleSourceAction mRoleSourceAction);
+        Task<List<MUsers.MRoleSourceAction>> GetRoleSourceActionDetails(int userid, string role);
+        Task<List<MUsers.MRole>> GetAllRolesOnly();
+        void LogErrorinDB(string ErrorType, string ErrorSourceDetails, string ErrorDescription);
     }
 }

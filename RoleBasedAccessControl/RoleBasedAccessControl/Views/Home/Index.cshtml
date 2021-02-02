@@ -74,140 +74,222 @@
             }
     </style>
 </head>
-<div class="row text-center" id="dv_add_user">
-    <div class="col-md-4">
+<div id="Dv_RoleAction">
+    <div class="row text-center" id="dv_add_Role">
+        <div class="col-md-4">
 
-    </div>
-    <div style="background: #f5f4f4;padding:3%">
-        <h4>Add New User</h4>
-        <table class="text-center">
-            <tr>
-                <td>Full Name:</td>
-                <td><input type="text" id="User_Name" /></td>
-            </tr>
-            <tr>
-                <td>Email Address:</td>
-                <td><input type="email" id="User_EmailAddress" /></td>
-            </tr>
-            <tr>
-                <td>Create Password:</td>
-                <td><input type="password" id="User_Password" /></td>
-            </tr>
-            <tr>
-                <td>Role: </td>
-                <td>
-                    <div class="multiselect">
-                        <div class="selectBox" onclick="showCheckboxes()">
-                            <select id="User_Role">
-                                <option>Select an option</option>
-                            </select>
-                            <div class="overSelect"></div>
-                        </div>
-                        <div id="checkboxes">
-                            <label for="one">
-                                <input type="checkbox" class="role_option" id="SystemAdmin" value="1" />System Admin
-                            </label>
-                            <label for="two">
-                                <input type="checkbox" class="role_option" id="CustomerAdmin" value="2" />Customer Admin
-                            </label>
-                            <label for="three">
-                                <input type="checkbox" class="role_option" id="CustomerMember" value="3" />Customer Member
-                            </label>
-                            <label for="three">
-                                <input type="checkbox" class="role_option" id="User" value="4" />User
-                            </label>
-                        </div>
-                    </div>
-                    @*<select id="User_Role" multiple>
-            <option value="1">System Admin</option>
-            <option value="2">Customer Admin</option>
-            <option value="3">Customer Member</option>
-            <option value="4">User</option>
-        </select>*@
-                </td>
-            </tr>
-        </table><br />
-        <input class="btn btn-success addsubmit" type="button" onclick="fn_AddNewUser()" value="Submit" />
-    </div>
-</div>
-<div id="dv_Create_ScrollHere"></div>
-<br />
-<div class="row">
-    <div class="col-md-12">
-        <table id="customers">
-            <thead>
+        </div>
+        <div style="background: #f5f4f4;padding:3%">
+            <h4>Add New Role</h4>
+            <table class="text-center">
                 <tr>
-                    <th>Full Name</th>
-                    <th>Email Address</th>
-                    <th>Role</th>
-                    <th>Action</th>
+                    <td>Role:</td>
+                    <td><input type="text" id="Role_Name" /></td>
                 </tr>
-            </thead>
-            <tbody id="tblbdy_Users">
-                
-            </tbody>
-        </table></div>
+                <tr>
+                    <td>#1</td>
+                </tr>
+                <tr style="background-color:azure">
+                    <td>Source:</td>
+                    <td>
+                        <label for="one">
+                            <input type="checkbox" class="source_checkbox" id="User" value="1" />User
+                        </label>
+                    </td>
+                </tr>
+                <tr style="background-color:beige">
+                    <td>Action Type Accessibilty:</td>
+                    <td>
+                        <div class="multiselect">
+                            <div id="checkboxes">
+                                <label for="one">
+                                    <input type="checkbox" class="_actiontype_option1" id="Read" value="1" />Read
+                                </label>
+                                <label for="two">
+                                    <input type="checkbox" class="_actiontype_option1" id="Write" value="2" />Write
+                                </label>
+                                <label for="three">
+                                    <input type="checkbox" class="_actiontype_option1" id="DELETE" value="3" />DELETE
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#2</td>
+                </tr>
+                <tr style="background-color:azure">
+                    <td>Source:</td>
+                    <td>
+                        <label for="one">
+                            <input type="checkbox" class="source_checkbox" id="Bike" value="2" />Bike
+                        </label>
+                    </td>
+                </tr>
+                <tr style="background-color:beige">
+                    <td>Action Type Accessibilty:</td>
+                    <td>
+                        <div class="multiselect">
+                            <div id="checkboxes">
+                                <label for="one">
+                                    <input type="checkbox" class="_actiontype_option2" id="Read" value="1" />Read
+                                </label>
+                                <label for="two">
+                                    <input type="checkbox" class="_actiontype_option2" id="Write" value="2" />Write
+                                </label>
+                                <label for="three">
+                                    <input type="checkbox" class="_actiontype_option2" id="DELETE" value="3" />DELETE
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#3</td>
+                </tr>
+                <tr style="background-color:azure">
+                    <td>Source:</td>
+                    <td>
+                        <label for="one">
+                            <input type="checkbox" class="source_checkbox" id="Booking" value="3" />Booking
+                        </label>
+                    </td>
+                </tr>
+                <tr style="background-color:beige">
+                    <td>Action Type Accessibilty:</td>
+                    <td>
+                        <div class="multiselect">
+                            <div id="checkboxes">
+                                <label for="one">
+                                    <input type="checkbox" class="_actiontype_option3" id="Read" value="1" />Read
+                                </label>
+                                <label for="two">
+                                    <input type="checkbox" class="_actiontype_option3" id="Write" value="2" />Write
+                                </label>
+                                <label for="three">
+                                    <input type="checkbox" class="_actiontype_option3" id="DELETE" value="3" />DELETE
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table><br />
+            <input class="btn btn-success addRole" type="button" onclick="fn_AddNewRole()" value="Submit" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <table id="customers">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Source(s) & ActionType(s)</th>
+                    </tr>
+                </thead>
+                <tbody id="tblbdy_Roles">
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <br />
-<div class="row" id="dv_update_user" style="display:none">
-    <div class="col-md-4">
 
-    </div>
-    <div style="background: #f5f4f4;padding:3%">
-        <h4>Update User</h4>
-        <table>
-            <tr>
-                <td>Edit Full Name:</td>
-                <td><input type="text" id="Update_User_Name" /></td>
-            </tr>
-            <tr>
-                <td>Edit Email Address:</td>
-                <td><input type="email" id="Update_User_EmailAddress" /></td>
-            </tr>
-            <tr>
-                <td>Change Password:</td>
-                <td><input readonly type="password" id="Update_User_Password" /></td>
-            </tr>
-            <tr>
-                <td>Role(s):</td>
-                <td><label id="static_roles"></label></td>
-            </tr>
-            <tr>
-                <td>Change Role: </td>
-                <td>
-                    <div class="multiselect">
-                        <div class="selectBox" onclick="showCheckboxes_u()">
-                            <select id="Update_User_Role">
-                                <option>Select an option</option>
-                            </select>
-                            <div class="overSelect_u"></div>
+<div id="div_userAction">
+
+    <div class="row text-center writeAccess" id="dv_add_user">
+        <div class="col-md-4">
+
+        </div>
+        <div style="background: #f5f4f4;padding:3%">
+            <h4>Add New User</h4>
+            <table class="text-center">
+                <tr>
+                    <td>Full Name:</td>
+                    <td><input type="text" id="User_Name" /></td>
+                </tr>
+                <tr>
+                    <td>Email Address:</td>
+                    <td><input type="email" id="User_EmailAddress" /></td>
+                </tr>
+                <tr>
+                    <td>Create Password:</td>
+                    <td><input type="password" id="User_Password" /></td>
+                </tr>
+                <tr>
+                    <td>Role: </td>
+                    <td>
+                        <div class="multiselect">
+                            <div id="dv_checkboxes">
+                                
+                            </div>
                         </div>
-                        <div id="checkboxes_u">
-                            <label for="one">
-                                <input type="checkbox" class="update_role_option" id="SystemAdmin" value="1" />System Admin
-                            </label>                          
-                            <label for="two">                 
-                                <input type="checkbox" class="update_role_option" id="CustomerAdmin" value="2" />Customer Admin
-                            </label>                          
-                            <label for="three">               
-                                <input type="checkbox" class="update_role_option" id="CustomerMember" value="3" />Customer Member
-                            </label>                          
-                            <label for="three">               
-                                <input type="checkbox" class="update_role_option" id="User" value="4" />User
-                            </label>
-                        </div>
-                    </div>
-                    @*<select id="Update_User_Role" multiple>
-                        <option value="1">System Admin</option>
-                        <option value="2">Customer Admin</option>
-                        <option value="3">Customer Member</option>
-                        <option value="4">User</option>
-                    </select>*@
-                </td>
-            </tr>
-        </table><br />
-        <input class="btn btn-success editsubmit" type="button" onclick="fn_UpdateUser()" value="Submit" />
+                    </td>
+                </tr>
+            </table><br />
+            <input class="btn btn-success addsubmit" type="button" onclick="fn_AddNewUser()" value="Submit" />
+        </div>
     </div>
+    <div id="dv_Create_ScrollHere"></div>
+    <br />
+    <div class="row readAccess">
+        <input type="button" value="View User" onclick="fn_UserView(0);" />
+        <div class="col-md-12">
+            <table id="customers">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tblbdy_Users">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div class="row editAccess" id="dv_update_user" style="display:none">
+        <div class="col-md-4">
+
+        </div>
+        <div style="background: #f5f4f4;padding:3%">
+            <h4>Update User</h4>
+            <table>
+                <tr>
+                    <td>Edit Full Name:</td>
+                    <td><input type="text" id="Update_User_Name" /></td>
+                </tr>
+                <tr>
+                    <td>Edit Email Address:</td>
+                    <td><input type="email" id="Update_User_EmailAddress" /></td>
+                </tr>
+                <tr>
+                    <td>Change Password:</td>
+                    <td><input readonly type="password" id="Update_User_Password" /></td>
+                </tr>
+                <tr>
+                    <td>Role(s):</td>
+                    <td><label id="static_roles"></label></td>
+                </tr>
+                <tr>
+                    <td>Change Role: </td>
+                    <td>
+                        <div class="multiselect">
+                            <div id="dv_checkboxes_u">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table><br />
+            <input class="btn btn-success editsubmit" type="button" onclick="fn_UpdateUser()" value="Submit" />
+        </div>
+    </div>
+</div>
+
+<div id="dv_bikeAction">
+    <div></div>
 </div>
 <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
@@ -271,6 +353,7 @@
 <script>
     $(document).ready(function () {
         $("#heading_of_user").html(' ' + sessionStorage.getItem("Role"));
+        //fn_UserView();
     });
     function fn_AddNewUser() {
         var roleList = [];
@@ -330,10 +413,10 @@
         });
     }
     function fn_UserView(userid) {
-        var static_url = sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid=" + userid + '';
+        var static_url = sessionStorage.getItem("UIEndPoint") + "api/Users/GetUserDetails?userid=" + userid;
         $.ajax({
             async: true,
-            cache: false,
+            cache: true,
             type: 'GET',
             headers: {
                 'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
@@ -355,12 +438,14 @@
                     <td>${roles}</td>
                     <td>
                         <span><i class="fa fa-edit edit" onclick="fn_UserEdit(${users.UserId})" style="font-size: 24px;color: #2749f3;"></i></span>
-                        <span><i class="fa fa-trash trash" onclick="fn_UserDelete(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
+                        <span><i class="fa fa-trash trash deleteAccess" onclick="fn_UserDelete(${users.UserId})" style="font-size: 24px;color: #ff940a;"></i></span>
                     </td>
                 </tr>`;
                         }
                     });
                     $("#tblbdy_Users").html(tblbdy);
+                    $(".trash").hide();
+                    $(".edit").hide();
                     fn_AccessByRole();
                 }
                 else if (thrownError.status === 206) {
@@ -373,7 +458,7 @@
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 //alert('There was problem processing your request. Please try again later.');
-                fn_UserView(userid);
+                //fn_UserView(userid);
                 //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
             }
         });
@@ -505,6 +590,152 @@
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert('There was problem processing your request. Please try again later.');
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+
+    function fn_AddNewRole() {
+        var _sources = [];
+        $("input:checkbox[class=source_checkbox]:checked").each(function () {
+            var _actionTypes = [];
+            $("input:checkbox[class=_actiontype_option" + parseInt($(this).val()) + "]:checked").each(function () {
+                _actionTypes.push({ 'AcitonTypeId': parseInt($(this).val()), 'ActionName':"" });
+            });
+            _sources.push({
+                'SourceId': parseInt($(this).val()),
+                'SourceName':"",
+                'ActionTypes': _actionTypes
+            });
+        });
+        var mRoleSourceAction = {
+            'RoleSourceActionId': 0,
+            'Role': $("#Role_Name").val().trim(),
+            'Sources': _sources
+        };
+        $.ajax({
+            async: true,
+            cache: false,
+            type: 'POST',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+            },
+            url: sessionStorage.getItem("UIEndPoint") + "api/Users/AddRoleSourceActionDetails" + '',
+            data: JSON.stringify(mRoleSourceAction),
+            contentType: 'Application/json',
+            success: function (xhr, ajaxOptions, thrownError) {
+                var data = $.parseJSON(xhr);
+                if (thrownError.status === 200) {
+                    alert(data);
+                    //fn_UserView(0);
+                    fn_RoleView();
+                    fn_GetAllRolesOnly();
+                    //dv_checkboxes
+                }
+                else if (thrownError.status === 206) {
+                    alert(data);
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('There was problem processing your request. Please try again later.');
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+
+    
+    function fn_GetAllRolesOnly() {
+        var static_url = sessionStorage.getItem("UIEndPoint") + "api/Users/GetAllRolesOnly";
+        $.ajax({
+            async: true,
+            cache: true,
+            type: 'GET',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+            },
+            url: static_url,
+            success: function (xhr, ajaxOptions, thrownError) {
+                
+                if (thrownError.status === 200) {
+                    var data = $.parseJSON(xhr);
+                    var u_opn = '';
+                    var opn = '';
+                    $.each(data, function (i, role) {
+                        //RoleName
+                        u_opn += `<label for="one">
+                                <input type="checkbox" class="update_role_option" id="${role.RoleName.replaceAll(' ', '')}" value="${role.RoleId}" />${role.RoleName}
+                            </label>`;
+                        opn += `<label for="one">
+                                <input type="checkbox" class="role_option" id="${role.RoleName.replaceAll(' ', '')}" value="${role.RoleId}" />${role.RoleName}
+                            </label>`;
+                    });
+                    $("#dv_checkboxes").html(opn);
+                    $("#dv_checkboxes_u").html(u_opn);
+                }
+                else if (thrownError.status === 206) {
+                    alert($.parseJSON(xhr));
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('There was problem processing your request. Please try again later.');
+                fn_GetAllRolesOnly();
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+    function fn_RoleView() {
+        var static_url = sessionStorage.getItem("UIEndPoint") + "api/Users/GetRoleSourceActionDetails?userid=0";
+        $.ajax({
+            async: true,
+            cache: true,
+            type: 'GET',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+            },
+            url: static_url,
+            success: function (xhr, ajaxOptions, thrownError) {
+                
+                if (thrownError.status === 200) {
+                    var data = $.parseJSON(xhr);
+                    var tblbdy = '';
+                    $.each(data, function (i, Roles) {
+
+                        var sources = '';
+                        $.each(Roles.Sources, function (j, Source) {
+                            //SourceName
+                            var actionTypes = '';
+                            $.each(Source.ActionTypes, function (k, ActionTypes) {
+                                actionTypes += k > 0 ? (', ' + ActionTypes.ActionName) : ActionTypes.ActionName;
+                            });
+                            sources += j > 0 ? (', <strong>' + Source.SourceName + "</strong>(" + actionTypes + ")") : ('<strong>' + Source.SourceName + '</strong>' + "(" + actionTypes + ")");
+                        });
+                        sources = sources == '' ? 'Not Available' : sources;
+                        tblbdy += `<tr id="row_roleSourceDetails${Roles.Role}">
+                    <td>${Roles.Role}</td>
+                    <td>${sources}</td>
+                </tr>`;
+                    });
+                    $("#tblbdy_Roles").html(tblbdy);
+                }
+                else if (thrownError.status === 206) {
+                    alert($.parseJSON(xhr));
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('There was problem processing your request. Please try again later.');
+                fn_RoleView();
                 //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
             }
         });

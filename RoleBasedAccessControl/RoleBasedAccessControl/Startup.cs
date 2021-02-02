@@ -64,7 +64,7 @@ namespace RoleBasedAccessControl
             APIsettingsSection.Get<POCO.AppSettings>();
             services.Configure<POCO.AppSettings>(APIsettingsSection);
 
-            services.AddDbContext<ramnitesh_aonepageContext>(options => {
+            services.AddDbContext<rbrbacdbContext>(options => {
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ConnectionString"));
             }, ServiceLifetime.Transient);
@@ -117,8 +117,8 @@ namespace RoleBasedAccessControl
             services.AddControllersWithViews();
             services.AddSingleton<IApplicationConfiguration, ApplicationConfiguration>(e => Configuration.GetSection("AppSettings").Get<ApplicationConfiguration>());
 
-            services.AddDbContext<ramnitesh_aonepageContext>();
-            ramnitesh_aonepageContext rbDBContext = new ramnitesh_aonepageContext(POCO.AppSettings.GetMasterConnectionString());
+            services.AddDbContext<rbrbacdbContext>();
+            rbrbacdbContext rbDBContext = new rbrbacdbContext(POCO.AppSettings.GetMasterConnectionString());
             IOAuthDataAccess oauthDataAccess = new OAuthDataAccess(rbDBContext);
 
             services.AddScoped<IOAuth, ROAuth>(sp =>

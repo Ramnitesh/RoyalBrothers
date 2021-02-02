@@ -59,31 +59,115 @@
         if(sessionStorage.getItem('AccessToken') == null) {
             location.href = sessionStorage.getItem('UIEndPoint') + 'OAuth/Index';
         }
-        fn_UserView(0);
-        
+        $(".writeAccess").hide();
+        $(".readAccess").hide();
+        $(".trash").hide();
+        $(".edit").hide();
+        fn_GetAllRolesOnly();
+        fn_AccessByRole();
     });
     function fn_AccessByRole() {
-        if (sessionStorage.getItem("Role").split(', ').includes('System Admin') || sessionStorage.getItem("Role").split(', ').includes('Royal Brothers Admin')) {
+        if (sessionStorage.getItem("Role").split(', ').includes('Royal Brothers Admin')) {
             // Access to add, edit, delete, view
-
+            $("#Dv_RoleAction").show();
+            $(".writeAccess").show();
+            $(".writeAccess").show();
+            $(".readAccess").show();
+            $(".trash").show();
+            $(".edit").show();
+            fn_RoleView();
         }
-        else if (sessionStorage.getItem("Role").split(', ').includes('Customer Admin')) {
-            // Access to edit, delete, view
-            $("#dv_add_user").hide();
-        }
-        else if (sessionStorage.getItem("Role").split(', ').includes('Customer Member')) {
-            // Access to edit, view
-            $("#dv_add_user").hide();
-            $(".trash").hide();
-        }
-        else if (sessionStorage.getItem("Role").split(', ').includes('User')) {
-            // Access to view only
-            $("#dv_add_user").hide();
-            $(".trash").hide();
-            $(".edit").hide();
+        else {
+            fn_VisibiltiAccess();
         }
     }
+    function fn_VisibiltiAccess() {
+        $("#Dv_RoleAction").hide();
+        var static_url = sessionStorage.getItem("UIEndPoint") + "api/Users/GetRoleSourceActionDetails?userid=" + sessionStorage.getItem("UserId");
+        $.ajax({
+            async: true,
+            cache: true,
+            type: 'GET',
+            headers: {
+                'Authorization': '' + getJwtBearerToken() + '', 'refreshToken': '' + getRefreshToken() + ''
+            },
+            url: static_url,
+            success: function (xhr, ajaxOptions, thrownError) {
+                
+                if (thrownError.status === 200) {
+                    var data = $.parseJSON(xhr);
+                    for (var i = 0; i < data.length; i++) {
+                        var Roles = data[i];
+                        //$.each(data, function (i, Roles) {
+                        for (var j = 0; j < Roles.Sources.length; j++) {
+                            var Source = Roles.Sources[j];
+                            //$.each(Roles.Sources, function (j, Source) {
+                            if (Source.SourceName == "User") {
+                                $("#div_userAction").show();
+                                for (var k = 0; k < Source.ActionTypes.length; k++) {
+                                    var ActionTypes = Source.ActionTypes;
+                                    //}
+                                    //$.each(Source.ActionTypes, function (k, ActionTypes) {
+                                    if (ActionTypes[k].ActionName == 'Read') {
+                                        $(".readAccess").show();
+                                        console.log(Source.SourceName);
+                                    }
+                                    if (ActionTypes[k].ActionName == 'Write') {
+                                        $(".writeAccess").show();
+                                        $(".edit").show();
+                                    }
+                                    if (ActionTypes[k].ActionName == 'Delete') {
+                                        $(".trash").show();
+                                    }
+                                }
+                            }
+                            //if (Source.SourceName == "Bike") {
+                            //    $.each(Source.ActionTypes, function (k, ActionTypes) {
+                            //        if (ActionTypes.ActionName == 'Read') {
 
+                            //        }
+                            //        if (ActionTypes.ActionName == 'write') {
+
+                            //        }
+                            //        if (ActionTypes.ActionName == 'delete') {
+
+                            //        }
+                            //    });
+                            //}
+                            //if (Source.SourceName == "Booking") {
+                            //    $.each(Source.ActionTypes, function (k, ActionTypes) {
+                            //        if (ActionTypes.ActionName == 'Read') {
+
+                            //        }
+                            //        if (ActionTypes.ActionName == 'write') {
+
+                            //        }
+                            //        if (ActionTypes.ActionName == 'delete') {
+
+                            //        }
+                            //    });
+                            //}
+                            //});
+                        }
+                        //});
+                    }
+                }
+                else if (thrownError.status === 206) {
+                    alert($.parseJSON(xhr));
+                }
+                else {
+                    StatusCode = 401;
+                    window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('There was problem processing your request. Please try again later.');
+                fn_VisibiltiAccess();
+                //window.location.href = sessionStorage.getItem('UIEndPoint') + "Home/Error?" + StatusCode;
+            }
+        });
+    }
+    
     function fn_Logout() {
         //window.location.href = sessionStorage.getItem('UIEndPoint') + 'OAuth/Login';
         $.ajax({

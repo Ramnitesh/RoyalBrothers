@@ -91,6 +91,7 @@ namespace RoleBasedAccessControl.Repository
             {
                 responseMsg.StatusCode = 500;
                 responseMsg.ResponseContent = JsonConvert.SerializeObject(new Library.ExceptionResponse());
+                _dataAccessAOP.LogErrorinDB("A", System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName.ToString() + " " + System.Reflection.MethodBase.GetCurrentMethod().Name, ex.ToString());
             }
             return responseMsg;
         }

@@ -47,7 +47,7 @@ namespace RoleBasedAccessControl.Controllers
 
         [Route("AddNewUser")]
         [HttpPost]
-        [Authorize(Roles = "Royal Brothers Admin, System Admin")]
+        [Authorize]
         public async Task<IActionResult> AddNewUser([FromBody] MUsersDetails userdetails)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -63,7 +63,7 @@ namespace RoleBasedAccessControl.Controllers
         }
         [Route("GetUserDetails")]
         [HttpGet]
-        [Authorize(Roles = "Royal Brothers Admin, System Admin, Customer Admin, Customer Member, User")]
+        [Authorize]
         public async Task<IActionResult> GetUserDetails(int userid = 0)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -79,7 +79,7 @@ namespace RoleBasedAccessControl.Controllers
         }
         [Route("UpdateUserDetails")]
         [HttpPost]
-        [Authorize(Roles = "Royal Brothers Admin, System Admin, Customer Admin, Customer Member")]
+        [Authorize]
         public async Task<IActionResult> UpdateUserDetails([FromBody] MUsersDetails usersDetails)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -95,7 +95,7 @@ namespace RoleBasedAccessControl.Controllers
         }
         [Route("DeleteUserDetails")]
         [HttpDelete]
-        [Authorize(Roles = "Royal Brothers Admin, System Admin, Customer Admin")]
+        [Authorize]
         public async Task<IActionResult> DeleteUserDetails(int userid)
         {
             int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
@@ -106,6 +106,54 @@ namespace RoleBasedAccessControl.Controllers
             else
             {
                 _response = await _iUser.DeleteUserDetails(userid);
+            }
+            return StatusCode(Convert.ToInt16(_response.StatusCode), _response.ResponseContent);
+        }
+        [Route("AddRoleSourceActionDetails")]
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddRoleSourceActionDetails([FromBody] MRoleSourceAction mRoleSourceAction)
+        {
+            int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
+            if (LoggedUserID == 0)
+            {
+                _response = SessionExpired();
+            }
+            else
+            {
+                _response = await _iUser.AddRoleSourceActionDetails(mRoleSourceAction);
+            }
+            return StatusCode(Convert.ToInt16(_response.StatusCode), _response.ResponseContent);
+        }
+        [Route("GetRoleSourceActionDetails")]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetRoleSourceActionDetails(int userid = 0, string role = "")
+        {
+            int LoggedUserID = Convert.ToInt32(GetClaim("UserId"));
+            if (LoggedUserID == 0)
+            {
+                _response = SessionExpired();
+            }
+            else
+            {
+                _response = await _iUser.GetRoleSourceActionDetails(userid,role);
+            }
+            return StatusCode(Convert.ToInt16(_response.StatusCode), _response.ResponseContent);
+        }
+        [Route("GetAllRolesOnly")]
+        [HttpGet]
+        //[Authorize]
+        public async Task<IActionResult> GetAllRolesOnly()
+        {
+            int LoggedUserID = 9;//Convert.ToInt32(GetClaim("UserId"));
+            if (LoggedUserID == 0)
+            {
+                _response = SessionExpired();
+            }
+            else
+            {
+                _response = await _iUser.GetAllRolesOnly();
             }
             return StatusCode(Convert.ToInt16(_response.StatusCode), _response.ResponseContent);
         }

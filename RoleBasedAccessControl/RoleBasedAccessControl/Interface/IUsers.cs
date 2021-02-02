@@ -13,5 +13,8 @@ namespace RoleBasedAccessControl.Interface
         Task<Library.APIResponse> GetUserDetails(int userid);
         Task<Library.APIResponse> UpdateUserDetails(MUsersDetails userdetails);
         Task<Library.APIResponse> DeleteUserDetails(int UserId);
+        Task<Library.APIResponse> AddRoleSourceActionDetails(MRoleSourceAction mRoleSourceAction);
+        Task<Library.APIResponse> GetRoleSourceActionDetails(int userid, string role);
+        Task<Library.APIResponse> GetAllRolesOnly();
     }
 }

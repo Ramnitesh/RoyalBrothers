@@ -15,12 +15,12 @@ namespace Lib.Databse.Models
         }
 
         public int UserId { get; set; }
-        public string PersonalMailId { get; set; }
+        public string FullName { get; set; }
         public string Password { get; set; }
+        public string PersonalMailId { get; set; }
         public bool IsLoginDisabled { get; set; }
         public bool IsUserDisabled { get; set; }
         public string PrivacyCode { get; set; }
-        public string FullName { get; set; }
 
         public virtual ICollection<TblUserRole> TblUserRole { get; set; }
     }

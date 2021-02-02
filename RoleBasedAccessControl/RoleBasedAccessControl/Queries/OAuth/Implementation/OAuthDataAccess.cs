@@ -10,15 +10,37 @@ namespace RoleBasedAccessControl.Queries.OAuth.Implementation
 {
     public partial class OAuthDataAccess : IOAuthDataAccess
     {
-        private readonly ramnitesh_aonepageContext _RBContext;
-        public OAuthDataAccess(ramnitesh_aonepageContext Context)
+        private readonly rbrbacdbContext _RBContext;
+        public OAuthDataAccess(rbrbacdbContext Context)
         {
             _RBContext = Context;
         }
-        public ramnitesh_aonepageContext getContext()
+        public rbrbacdbContext getContext()
         {
             return _RBContext;
         }
+        #region Error Log
+        public async void LogErrorinDB(string ErrorType, string ErrorSourceDetails, string ErrorDescription)
+        {
+            try
+            {
+                if (_RBContext != null)
+                {
+                    TblErrorLogs errorLogs = new TblErrorLogs();
+                    errorLogs.ErrorType = ErrorType;
+                    errorLogs.ErrorSourceDetails = ErrorSourceDetails;
+                    errorLogs.ErrorDescription = ErrorDescription;
+                    errorLogs.LoggedDateTime = Library.UtcDateTime();
+                    await _RBContext.AddAsync(errorLogs);
+                    await _RBContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        #endregion
 
     }
 }

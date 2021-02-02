@@ -22,5 +22,22 @@ namespace RoleBasedAccessControl.Models
             public string RoleName { get; set; }
             public int UserId { get; set; }
         }
+        public class MRoleSourceAction
+        {
+            public int RoleSourceActionId { get; set; }
+            public string Role { get; set; }
+            public List<MSource> Sources { get; set; }
+        }
+        public class MSource
+        {
+            public int SourceId { get; set; }
+            public string SourceName { get; set; }
+            public List<MActionType> ActionTypes { get; set; }
+        }
+        public class MActionType
+        {
+            public int AcitonTypeId { get; set; }
+            public string ActionName { get; set; }
+        }
     }
 }

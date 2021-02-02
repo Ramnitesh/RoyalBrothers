@@ -7,20 +7,43 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoleBasedAccessControl.POCO;
+using RoleBasedAccessControl.Models;
 
 namespace RoleBasedAccessControl.Queries.User.Implementation
 {
     public partial class UserDataAccess : IUserDataAccess
     {
-        private readonly ramnitesh_aonepageContext _AOnePageDBContext;
-        public UserDataAccess(ramnitesh_aonepageContext Context)
+        private readonly rbrbacdbContext _AOnePageDBContext;
+        public UserDataAccess(rbrbacdbContext Context)
         {
             _AOnePageDBContext = Context;
         }
 
-        public ramnitesh_aonepageContext getContext()
+        public rbrbacdbContext getContext()
         {
             return _AOnePageDBContext;
         }
+        #region Error Log
+        public async void LogErrorinDB(string ErrorType, string ErrorSourceDetails, string ErrorDescription)
+        {
+            try
+            {
+                if (_AOnePageDBContext != null)
+                {
+                    TblErrorLogs errorLogs = new TblErrorLogs();
+                    errorLogs.ErrorType = ErrorType;
+                    errorLogs.ErrorSourceDetails = ErrorSourceDetails;
+                    errorLogs.ErrorDescription = ErrorDescription;
+                    errorLogs.LoggedDateTime = Library.UtcDateTime();
+                    await _AOnePageDBContext.AddAsync(errorLogs);
+                    await _AOnePageDBContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        #endregion
     }
 }

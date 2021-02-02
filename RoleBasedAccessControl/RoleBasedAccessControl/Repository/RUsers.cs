@@ -114,5 +114,76 @@ namespace RoleBasedAccessControl.Repository
             }
             return responseMsg;
         }
+
+        public async Task<Library.APIResponse> AddRoleSourceActionDetails(MUsers.MRoleSourceAction mRoleSourceAction)
+        {
+            try
+            {
+                bool user = await _iUserDataAccess.AddRoleSourceActionDetails(mRoleSourceAction);
+                if (user)
+                {
+                    responseMsg.StatusCode = 200;
+                    responseMsg.ResponseContent = JsonConvert.SerializeObject("Role added successfully.");
+                }
+                else
+                {
+                    responseMsg.StatusCode = 206;
+                    responseMsg.ResponseContent = JsonConvert.SerializeObject("Something went wrong while processing your request.");
+                }
+            }
+            catch (Exception ex)
+            {
+                responseMsg.StatusCode = 500;
+                responseMsg.ResponseContent = JsonConvert.SerializeObject(new Library.ExceptionResponse());
+            }
+            return responseMsg;
+        }
+        public async Task<Library.APIResponse> GetRoleSourceActionDetails(int userid, string role)
+        {
+            try
+            {
+                List<MUsers.MRoleSourceAction> roleList = await _iUserDataAccess.GetRoleSourceActionDetails(userid,role);
+                if (roleList != null)
+                {
+                    responseMsg.StatusCode = 200;
+                    responseMsg.ResponseContent = JsonConvert.SerializeObject(roleList);
+                }
+                else
+                {
+                    responseMsg.StatusCode = 206;
+                    responseMsg.ResponseContent = JsonConvert.SerializeObject("Something went wrong while processing your request.");
+                }
+            }
+            catch (Exception ex)
+            {
+                responseMsg.StatusCode = 500;
+                responseMsg.ResponseContent = JsonConvert.SerializeObject(new Library.ExceptionResponse());
+            }
+            return responseMsg;
+        }
+        public async Task<Library.APIResponse> GetAllRolesOnly()
+        {
+            try
+            {
+                List<MUsers.MRole> roleList = await _iUserDataAccess.GetAllRolesOnly();
+                if (roleList != null)
+                {
+                    responseMsg.StatusCode = 200;
+                    responseMsg.ResponseContent = JsonConvert.SerializeObject(roleList);
+                }
+                else
+                {
+                    responseMsg.StatusCode = 206;
+                    responseMsg.ResponseContent = JsonConvert.SerializeObject("Something went wrong while processing your request.");
+                }
+            }
+            catch (Exception ex)
+            {
+                responseMsg.StatusCode = 200;
+                responseMsg.ResponseContent = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName.ToString() + " " + System.Reflection.MethodBase.GetCurrentMethod().Name + "Error Description:- " + ex.ToString();// JsonConvert.SerializeObject(new Library.ExceptionResponse());
+                _iUserDataAccess.LogErrorinDB("A", System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName.ToString() + " " + System.Reflection.MethodBase.GetCurrentMethod().Name, ex.ToString());
+            }
+            return responseMsg;
+        }
     }
 }

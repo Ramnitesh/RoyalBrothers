@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace RoleBasedAccessControl.Queries.User.Implementation
 {
@@ -35,6 +36,44 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
                         tblUserRole.UserId = userid;
                         tblUserRole.RoleId = role.RoleId;
                         await _AOnePageDBContext.TblUserRole.AddAsync(tblUserRole);
+                    }
+                    await _AOnePageDBContext.SaveChangesAsync();
+                    dbContextTransaction.Commit();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                dbContextTransaction.Rollback();
+                throw ex;
+            }
+            return true;
+        }
+
+        public async Task<bool> AddRoleSourceActionDetails(MUsers.MRoleSourceAction mRoleSourceAction)
+        {
+            var dbContextTransaction = _AOnePageDBContext.Database.BeginTransaction();
+            try
+            {
+                if(_AOnePageDBContext != null)
+                {
+                    TblRoleMaster tblRoleMaster = new TblRoleMaster();
+                    tblRoleMaster.Role = mRoleSourceAction.Role;
+                    await _AOnePageDBContext.TblRoleMaster.AddAsync(tblRoleMaster);
+                    await _AOnePageDBContext.SaveChangesAsync();
+
+                    int roleid = await _AOnePageDBContext.TblRoleMaster.Where(x => x.Role == mRoleSourceAction.Role).Select(x => x.RoleId).FirstOrDefaultAsync();
+
+                    foreach (MUsers.MSource source in mRoleSourceAction.Sources)
+                    {
+                        foreach (MUsers.MActionType actionType in source.ActionTypes)
+                        {
+                            TblRoleSourceAction tblRoleSourceAction = new TblRoleSourceAction();
+                            tblRoleSourceAction.RoleId = roleid;
+                            tblRoleSourceAction.SourceId = source.SourceId;
+                            tblRoleSourceAction.AcitonTypeId = actionType.AcitonTypeId;
+                            await _AOnePageDBContext.TblRoleSourceAction.AddAsync(tblRoleSourceAction);
+                        }
                     }
                     await _AOnePageDBContext.SaveChangesAsync();
                     dbContextTransaction.Commit();
@@ -159,6 +198,124 @@ namespace RoleBasedAccessControl.Queries.User.Implementation
                 throw ex;
             }
             return true;
+        }
+        public async Task<List<MUsers.MRoleSourceAction>> GetRoleSourceActionDetails(int userid, string rolename)
+        {
+            var dbContextTransaction = _AOnePageDBContext.Database.BeginTransaction();
+            List<MUsers.MRoleSourceAction> mRoleDetailsList = new List<MUsers.MRoleSourceAction>();
+            try
+            {
+                if (_AOnePageDBContext != null)
+                {
+                    if (userid == 0)
+                    {
+                        List<MUsers.MRole> mRoles = new List<MUsers.MRole>();
+                        mRoles = await _AOnePageDBContext.TblRoleMaster.Select(r=> new MUsers.MRole { 
+                        RoleId = r.RoleId,
+                        RoleName=r.Role
+                        }).ToListAsync();
+                        foreach (MUsers.MRole role in mRoles)
+                        {
+                            int roleId = role.RoleId;
+                            List<int> sourceIds = _AOnePageDBContext.TblRoleSourceAction.Where(trsaw => trsaw.RoleId == roleId).Distinct().Select(T => T.SourceId).Distinct().ToList();
+                            List<MUsers.MSource> mSource = new List<MUsers.MSource>();
+                            foreach (int sourceId in sourceIds)
+                            {
+                                List<MUsers.MActionType> mActionTypesList = new List<MUsers.MActionType>();
+                                mActionTypesList = _AOnePageDBContext.TblRoleSourceAction.Where(trsaw => trsaw.SourceId == sourceId && trsaw.RoleId == roleId).Select(trs => new MUsers.MActionType
+                                {
+                                    AcitonTypeId = trs.AcitonTypeId,
+                                    ActionName = _AOnePageDBContext.TblActionType.Where(tatw => tatw.AcitonTypeId == trs.AcitonTypeId).Select(ta => ta.ActionName).FirstOrDefault()
+                                }).ToList();
+                                mSource.Add(_AOnePageDBContext.TblRoleSourceAction.Where(trsaw => trsaw.RoleId == roleId && trsaw.SourceId == sourceId).Select(trs => new MUsers.MSource
+                                {
+                                    SourceId = trs.SourceId,
+                                    SourceName = _AOnePageDBContext.TblSource.Where(s => s.SourceId == trs.SourceId).Select(ss => ss.SourceName).FirstOrDefault(),
+                                    ActionTypes = mActionTypesList
+                                }).FirstOrDefault());
+                                
+                            }
+                            mRoleDetailsList.Add(new MUsers.MRoleSourceAction
+                            {
+                                Role = role.RoleName,
+                                Sources = mSource
+                            });
+                        }
+                    }
+                    else
+                    {
+                        List<int> userRoleids = new List<int>();
+                        userRoleids = await _AOnePageDBContext.TblUserRole.Where(x => x.UserId == userid).Select(r => r.RoleId).ToListAsync();
+                        List<MUsers.MRole> mRoles = new List<MUsers.MRole>();
+                        mRoles = await _AOnePageDBContext.TblRoleMaster.Where(x=>userRoleids.Contains(x.RoleId)).Select(r => new MUsers.MRole
+                        {
+                            RoleId = r.RoleId,
+                            RoleName = r.Role
+                        }).ToListAsync();
+                        foreach (MUsers.MRole role in mRoles)
+                        {
+                            int roleId = role.RoleId;
+                            List<int> sourceIds = _AOnePageDBContext.TblRoleSourceAction.Where(trsaw => trsaw.RoleId == roleId).Distinct().Select(T => T.SourceId).Distinct().ToList();
+                            List<MUsers.MSource> mSource = new List<MUsers.MSource>();
+                            foreach (int sourceId in sourceIds)
+                            {
+                                List<MUsers.MActionType> mActionTypesList = new List<MUsers.MActionType>();
+                                mActionTypesList = _AOnePageDBContext.TblRoleSourceAction.Where(trsaw => trsaw.SourceId == sourceId && trsaw.RoleId == roleId).Select(trs => new MUsers.MActionType
+                                {
+                                    AcitonTypeId = trs.AcitonTypeId,
+                                    ActionName = _AOnePageDBContext.TblActionType.Where(tatw => tatw.AcitonTypeId == trs.AcitonTypeId).Select(ta => ta.ActionName).FirstOrDefault()
+                                }).ToList();
+                                mSource.Add(_AOnePageDBContext.TblRoleSourceAction.Where(trsaw => trsaw.RoleId == roleId && trsaw.SourceId == sourceId).Select(trs => new MUsers.MSource
+                                {
+                                    SourceId = trs.SourceId,
+                                    SourceName = _AOnePageDBContext.TblSource.Where(s => s.SourceId == trs.SourceId).Select(ss => ss.SourceName).FirstOrDefault(),
+                                    ActionTypes = mActionTypesList
+                                }).FirstOrDefault());
+
+                            }
+                            mRoleDetailsList.Add(new MUsers.MRoleSourceAction
+                            {
+                                Role = role.RoleName,
+                                Sources = mSource
+                            });
+                        }
+                    }
+                    dbContextTransaction.Commit();
+                    return mRoleDetailsList;
+                }
+            }
+            catch (Exception)
+            {
+                dbContextTransaction.Rollback();
+                //throw ex;
+            }
+            return mRoleDetailsList;
+        }
+        public async Task<List<MUsers.MRole>> GetAllRolesOnly()
+        {
+            var dbContextTransaction = _AOnePageDBContext.Database.BeginTransaction();
+            List<MUsers.MRole> roles = new List<MUsers.MRole>();
+            try
+            {
+                if (_AOnePageDBContext != null)
+                {
+                    roles = await (from TRM in _AOnePageDBContext.TblRoleMaster
+                                   //join UR in _AOnePageDBContext.TblUserRole on TRM.RoleId equals UR.RoleId
+                                   where TRM.RoleId != 1
+                                   select new MUsers.MRole
+                                   {
+                                       RoleId = TRM.RoleId,
+                                       RoleName = TRM.Role
+                                   }).ToListAsync();
+                    dbContextTransaction.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                dbContextTransaction.Rollback();
+                throw ex;
+            }
+            return roles;
         }
     }
 }

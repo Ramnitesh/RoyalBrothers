@@ -7,18 +7,16 @@ using System.Collections.Generic;
 
 namespace Lib.Databse.Models
 {
-    public partial class TblRoleMaster
+    public partial class TblActionType
     {
-        public TblRoleMaster()
+        public TblActionType()
         {
             TblRoleSourceAction = new HashSet<TblRoleSourceAction>();
-            TblUserRole = new HashSet<TblUserRole>();
         }
 
-        public int RoleId { get; set; }
-        public string Role { get; set; }
+        public int AcitonTypeId { get; set; }
+        public string ActionName { get; set; }
 
         public virtual ICollection<TblRoleSourceAction> TblRoleSourceAction { get; set; }
-        public virtual ICollection<TblUserRole> TblUserRole { get; set; }
     }
 }

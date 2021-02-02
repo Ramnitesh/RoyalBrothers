@@ -15,8 +15,9 @@ namespace RoleBasedAccessControl.Queries.OAuth.Interfaces
         List<Roles> GetAllRoles(int userid);
         string logUserSession(string UserId, string RefreshToken, string Behaviour);
         LoginResponse ValidateUser(string UserName, string password,int roleId);
-        
+
         //Task<string> ValidateEmailAddress(string emailAddress);
         //Task<string> VerifyAuthenticationCode(string emailId, string privacyCode);
+        void LogErrorinDB(string ErrorType, string ErrorSourceDetails, string ErrorDescription);
     }
 }
